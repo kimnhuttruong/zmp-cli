@@ -1,0 +1,14 @@
+{
+  "name": "QR Code",
+  "description": "App show qr code",
+  "version": "0.0.0",
+  "main": "index.html",
+  "window": {
+    "show": true,
+    "width": 275,
+    "height": 275,
+    "min-width": 275,
+    "min-height": 275,
+    "position": "center"
+  }
+}

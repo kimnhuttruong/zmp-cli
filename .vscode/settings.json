@@ -1,0 +1,5 @@
+{
+  "prettier.trailingComma": "none",
+  "workbench.colorTheme": "GitHub Dark Default",
+  "editor.formatOnSave": false
+}

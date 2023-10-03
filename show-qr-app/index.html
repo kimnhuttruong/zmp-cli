@@ -1,0 +1,57 @@
+<html>
+  <head>
+    <title>Zalo Mini App</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
+  </head>
+  <body>
+    <div class="flex-center position-relative">
+      <div id="qr-container" class="flex-center">
+        <p>Scan the QR code with Zalo app</p>
+        <div id="qr-code"></div>
+      </div>
+    </div>
+    <script src="assets/js/qrcode.min.js"></script>
+    <script>
+      const argv = nw.App.argv;
+      let url = '';
+      let title = 'Zalo Mini App';
+      if (Array.isArray(argv)) {
+        argv.forEach((item) => {
+          const items = item.split('=');
+          switch (items[0]) {
+            case 'url':
+              url = item.split('url=')[1];
+              break;
+            case 'title':
+              title = items[1];
+              break;
+
+            default:
+              break;
+          }
+        });
+      }
+      const qrCode = document.getElementById('qr-code');
+      new QRCode(qrCode, {
+        text: url,
+        width: 200,
+        height: 200,
+        colorDark: '#000000',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.H,
+      });
+      qrCode.title = 'Scan the QR code with Zalo app';
+      const win = nw.Window.get();
+      win.setResizable(false);
+      document.title = title;
+      document.body.addEventListener('contextmenu', function (ev) {
+        ev.preventDefault();
+        return false;
+      });
+    </script>
+  </body>
+</html>

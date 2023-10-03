@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src * 'self' 'unsafe-inline' 'unsafe-eval' data: gap: content:"
+    />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+
+    <meta name="theme-color" content="#007aff" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <link rel="icon" href="/src/static/icons/favicon.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <title>Zalo Mini Program</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        margin: 0px;
+      }
+
+      #zalo-frame {
+        width: 100%;
+        height: calc(100vh - 74px);
+        border: none;
+        overflow: auto;
+        cursor: grab;
+      }
+
+      #zalo-frame.transparent-nav {
+        height: calc(100vh - 30px);
+      }
+
+      .wrapper-frame {
+        width: 100%;
+        height: 100vh;
+        background-color: black;
+        margin: auto;
+        overflow: hidden;
+      }
+
+      .status-bar {
+        height: 30px;
+        background-color: #0068ff;
+        color: white;
+        font-size: 13px;
+      }
+
+      .status-bar .right {
+        float: right;
+        padding: 6px;
+      }
+
+      .status-bar .left {
+        float: left;
+        padding: 6px;
+        margin-left: 5px;
+      }
+
+      .status-bar .right i {
+        margin-right: 5px;
+      }
+
+      .header {
+        position: relative;
+        height: 32px;
+        background-color: #0068ff;
+        text-align: center;
+        color: #fff;
+        padding-top: 12px;
+      }
+
+      #right-buttons,
+      #left-buttons {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        font-size: 14px;
+        position: absolute;
+        right: 6px;
+        top: 36px;
+        height: 28px;
+        width: max-content;
+        border-radius: 16px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+      }
+
+      #left-buttons {
+        left: 6px;
+        top: 6px;
+      }
+
+      .text-white {
+        color: white;
+      }
+
+      .text-black {
+        color: black;
+      }
+
+      #right-buttons i,
+      #left-buttons i {
+        min-width: 23px;
+        width: 100%;
+        height: 100%;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        padding: 0 4px;
+      }
+
+      #right-buttons i:first-child {
+        border-right: 1px solid rgba(0, 0, 0, 0.1);
+      }
+
+      .text-black #statusbar,
+      .text-black #header,
+      .text-black #left-buttons,
+      .text-black #right-buttons {
+        color: black;
+        background-color: rgba(255, 255, 255, 0.6);
+      }
+
+      .text-white #statusbar,
+      .text-white #header,
+      .text-white #left-buttons,
+      .text-white #right-buttons {
+        color: white;
+        background-color: rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-none,
+      .btn-back #btn-home,
+      .btn-home #btn-back {
+        display: none !important;
+      }
+
+      .btn-both,
+      .btn-back,
+      .btn-back #btn-back,
+      .btn-home,
+      .btn-home #btn-home {
+        display: flex !important;
+      }
+
+      .btn-back.btn-home #btn-back {
+        border-right: 1px solid rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-back:not(.btn-home) {
+        background-color: transparent !important;
+        border: none !important;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="wrapper-frame" class="wrapper-frame">
+      <div id="statusbar" class="status-bar">
+        <div class="right">
+          <i class="fas fa-wifi"></i>
+          <i class="fas fa-battery-full"></i>
+        </div>
+        <div class="left">12:00</div>
+      </div>
+
+      <div id="header" class="header">
+        <div class="btn-none" id="left-buttons">
+          <i id="btn-back" class="fas fa-chevron-left"></i>
+          <i id="btn-home" class="fas fa-home"></i>
+        </div>
+        <span id="title"></span>
+      </div>
+      <div id="right-buttons">
+        <i class="fas fa-ellipsis-h"></i>
+        <i class="fas fa-power-off"></i>
+      </div>
+    </div>
+  </body>
+
+  <script>
+    window.configLeftButton = function (type) {
+      switch (type) {
+        case 'none':
+          document.getElementById('left-buttons').classList.remove('btn-home');
+          document.getElementById('left-buttons').classList.remove('btn-back');
+          document.getElementById('left-buttons').classList.add('btn-none');
+          break;
+        case 'home':
+          document.getElementById('left-buttons').classList.remove('btn-none');
+          document.getElementById('left-buttons').classList.remove('btn-back');
+          document.getElementById('left-buttons').classList.add('btn-home');
+          break;
+        case 'back':
+          document.getElementById('left-buttons').classList.remove('btn-none');
+          document.getElementById('left-buttons').classList.remove('btn-home');
+          document.getElementById('left-buttons').classList.add('btn-back');
+          break;
+        case 'both':
+          document.getElementById('left-buttons').classList.remove('btn-none');
+          document.getElementById('left-buttons').classList.add('btn-back');
+          document.getElementById('left-buttons').classList.add('btn-home');
+        default:
+          break;
+      }
+    };
+
+    function configTextColor(color) {
+      if (color) {
+        document
+          .getElementById('wrapper-frame')
+          .classList.add(color === 'white' ? 'text-white' : 'text-black');
+        document
+          .getElementById('wrapper-frame')
+          .classList.remove(color === 'white' ? 'text-black' : 'text-white');
+      }
+    }
+    function configTopBar(navColor, statusBarColor) {
+      if (navColor) {
+        document.getElementById('zalo-frame').classList.remove('transparent-nav')
+        document.getElementById('header').style.backgroundColor = navColor;
+        document.getElementById('statusbar').style.backgroundColor = navColor;
+      } else if (statusBarColor) {
+        document.getElementById('zalo-frame').classList.add('transparent-nav');
+        document.getElementById('header').style.display = 'none';
+        document.getElementById('statusbar').style.backgroundColor =
+          statusBarColor;
+      }
+    }
+    function configTitle(title) {
+      if (title) {
+        document.getElementById('title').innerHTML = title;
+        document.title = title;
+      }
+    }
+    window.addEventListener('message', function (event) {
+      const { type, data } = event.data;
+      switch (type) {
+        case 'config-left-button':
+          configLeftButton(data);
+          break;
+        case 'config-text-color':
+          configTextColor(data);
+          break;
+        case 'config-top-bar':
+          configTopBar(data.navColor, data.statusBarColor);
+          break;
+        case 'config-title':
+          configTitle(data);
+          break;
+        case 'custom':
+          eval(data);
+          break;
+        default:
+          break;
+      }
+    });
+    fetch(
+      `${window.location.protocol}//${window.location.hostname}:${
+        window.location.port - 1
+      }/app-config.json`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        configTitle(data.app.title);
+        configTopBar(data.app.headerColor, data.app.statusBarColor);
+        configTextColor(data.app.textColor);
+        window.configLeftButton(data.app.leftButton);
+      });
+    const iframe = document.createElement('iframe');
+    iframe.id = 'zalo-frame';
+    iframe.src = `${window.location.protocol}//${window.location.hostname}:${
+      window.location.port - 1
+    }`;
+    iframe.allow = 'geolocation; microphone; camera; midi; encrypted-media;';
+    document.body.firstElementChild.appendChild(iframe);
+  </script>
+</html>

@@ -1,0 +1,87 @@
+html {
+  margin: 0px;
+  padding: 0px;
+  overflow: hidden;
+}
+
+body {
+  margin: 0px;
+  padding: 0px;
+  -webkit-app-region: drag;
+}
+
+::-webkit-scrollbar-thumb {
+  display: none;
+}
+
+.button {
+  cursor: pointer;
+}
+
+.button i {
+  color: rgb(179, 179, 179);
+}
+.button:hover i {
+  color: rgb(130, 130, 130);
+}
+
+.popover {
+  width: 260px;
+}
+
+.popover-header {
+  display: inline-flex;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.popover-title {
+  margin-bottom: 0;
+}
+
+.popover-body {
+  position: relative;
+}
+
+.flex-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.position-relative {
+  position: relative;
+}
+
+.full-weight {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.opacity-50 {
+  z-index: 8;
+  background-color: #ffff;
+}
+
+#login-zalo-btn {
+  z-index: 9;
+}
+
+#login-status-loading {
+  display: flex;
+}
+
+#login-status-success,
+#login-status-fail {
+  display: none;
+}
+
+.notDrag {
+  -webkit-app-region: no-drag;
+}
