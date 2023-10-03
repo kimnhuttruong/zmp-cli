@@ -225,15 +225,11 @@ program
         opts = {
           quit: false,
           outputDir: 'www',
-          versionStatus: 0,
+          versionStatus: 2,
           desc: commitDescription,
           customProject: true
         }
       }
-      revision = require('child_process')
-        .execSync('git rev-parse HEAD')
-        .toString().trim()
-      console.log(revision);
     }
     if (options.testing) {
       opts.versionStatus = versionStatus.TESTING;
