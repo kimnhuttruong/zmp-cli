@@ -90,10 +90,10 @@ program
   .description('Login ZMP')
   .action(async () => {
     const currentProject = getCurrentProject(cwd);
-    if (!currentProject) {
-      log.text(`${logSymbols.error} This is not ZMP project`);
-      process.exit(1);
-    }
+    // if (!currentProject) {
+    //   log.text(`${logSymbols.error} This is not ZMP project`);
+    //   process.exit(1);
+    // }
 
     const optsLogin = await getLoginOptions();
     await loginApp(
